@@ -1,13 +1,18 @@
 {
   "name": "camera_streamer",
   "displayName": "camera_streamer",
-  "description": "",
-  "publisher": "unknown",
+  "description": "Used to Stream a WebRTC video stream from a camera",
+  "publisher": "InDro_Robotics",
   "homepage": "",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "UNLICENSED",
   "main": "./dist/extension.js",
-  "keywords": [],
+  "keywords": [
+    "RTSP",
+    "WebRTC",
+    "Camera",
+    "Streamer"
+  ],
   "scripts": {
     "build": "foxglove-extension build",
     "foxglove:prepublish": "foxglove-extension build --mode production",
@@ -39,9 +44,10 @@
     "react-dom": "18.2.0",
     "typescript": "4.9.3"
   },
-    "dependencies": {
-      "cra-template": "1.1.3",
-      "react-scripts": "^5.0.0",
-      "rtsptowebplayer": "github:vdalex25/rtsp-to-web-player#51832916615d9e6c72ae2962ebec35a5061eb775"
-    }
+  "dependencies": {
+    "cra-template": "1.1.3",
+    "react-scripts": "^5.0.0",
+    "rtsptowebplayer": "github:vdalex25/rtsp-to-web-player#51832916615d9e6c72ae2962ebec35a5061eb775",
+    "ts-loader": "^9.4.1"
+  }
 }
