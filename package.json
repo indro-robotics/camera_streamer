@@ -4,7 +4,7 @@
   "description": "Used to Stream a WebRTC video stream from a camera",
   "publisher": "InDro_Robotics",
   "homepage": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "UNLICENSED",
   "main": "./dist/extension.js",
   "keywords": [

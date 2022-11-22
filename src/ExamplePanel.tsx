@@ -3,15 +3,20 @@ import { useLayoutEffect, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import ReactPlayer from "./components/react-player/react-player";
 
+type State = {
+  url: string;
+  Title: string;
+};
 
 function ExamplePanel({ context}: { context: PanelExtensionContext}): JSX.Element {
   const [_topics, setTopics] = useState<readonly Topic[] | undefined>();
+  const [state, setState] = useState<State>({ url: "http://10.13.13.22:8083/stream/front/channel/0/webrtc?uuid=front/&channel=0", Title: "Front"});
   // var [panelTitle] = useState<string | undefined>();
   // const [setMessages] = useState<readonly MessageEvent<unknown>[] | undefined>();
   // useScript("main.js")
   // const [url, setUrl] = useState<StringConstructor | undefined>();
   const [renderDone, setRenderDone] = useState<(() => void) | undefined>();
-  const url = "http://10.13.13.22:8083/stream/front/channel/0/webrtc?uuid=front/&channel=0";
+  const url = "";
   var panelTitle = "Camera Streamer";
 
   useLayoutEffect(() => {
@@ -34,7 +39,13 @@ function ExamplePanel({ context}: { context: PanelExtensionContext}): JSX.Elemen
             label: "Title",
             input: "string",
             // `panelTitle` refers to a value in your extension panel's config
-            value: panelTitle,
+            value: state.Title,
+          },
+          url: {
+            label: "URL",
+            input: "string",
+            // `panelTitle` refers to a value in your extension panel's config
+            value: state.url,
           },
         },
       },
@@ -47,11 +58,12 @@ function ExamplePanel({ context}: { context: PanelExtensionContext}): JSX.Elemen
         case "update":
           if (action.payload.path[0] === "general" && action.payload.path[1] === "title") {
             // Read action.payload.value for the new panel title value
-            let panelTitle = String(action.payload.value);
+            setState({ ...state, Title: action.payload.value as string });
             console.log("panelTitle", panelTitle);
-  
-            // Update your panel's state accordingly
-            // context.updatePanelSettingsEditor(panelSettings)
+          } else if (action.payload.path[0] === "general" && action.payload.path[1] === "url") {
+            // Read action.payload.value for the new panel title value
+            setState({ ...state, url: action.payload.value as string });
+            console.log("url", url);
           }
           break;
       }
@@ -70,10 +82,10 @@ function ExamplePanel({ context}: { context: PanelExtensionContext}): JSX.Elemen
                 <div className="col-12">
                     <div className="card">
                         <div className="card-header">
-                            {panelTitle}
+                            {state.Title}
                         </div>
                         <div className="card-body p-0">
-                            <ReactPlayer url={url}/>
+                            <ReactPlayer url={state.url}/>
                         </div>
                     </div>
                 </div>

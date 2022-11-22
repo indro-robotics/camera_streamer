@@ -12,9 +12,9 @@ const ReactPlayer = ({url}) => {
         setState(e.type);
     }
     const playPause = () => {
-        if (player.video.src !== '') {
-            player.video.paused ? player.video.play() : player.video.pause();
-        }
+        setPlayer(new RTSPtoWEBPlayer({
+            parentElement: playerElement.current, controls: false
+        }));
     }
 
     useEffect(() => {
@@ -40,7 +40,7 @@ const ReactPlayer = ({url}) => {
     return (<div className="player-wrapper">
         <div ref={playerElement}/>
         <div className="control">
-            <button onClick={playPause}>Start/Stop</button>
+            <button onClick={playPause}>Restart</button>
         </div>
     </div>)
 }
