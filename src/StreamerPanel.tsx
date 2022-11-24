@@ -8,16 +8,17 @@ type State = {
   Title: string;
 };
 
-function ExamplePanel({ context}: { context: PanelExtensionContext}): JSX.Element {
+function StreamerPanel({ context}: { context: PanelExtensionContext}): JSX.Element {
   const [_topics, setTopics] = useState<readonly Topic[] | undefined>();
-  const [state, setState] = useState<State>({ url: "http://10.13.13.22:8083/stream/front/channel/0/webrtc?uuid=front/&channel=0", Title: "Front"});
-  // var [panelTitle] = useState<string | undefined>();
-  // const [setMessages] = useState<readonly MessageEvent<unknown>[] | undefined>();
-  // useScript("main.js")
-  // const [url, setUrl] = useState<StringConstructor | undefined>();
+  const [state, setState] = useState<State>(() => { 
+    const partialState = context.initialState as Partial<State>;
+    return {
+    url: partialState.url ?? "http://10.13.13.22:8083/stream/front/channel/0/webrtc?uuid=front&channel=0",
+    Title: partialState.Title ?? "Front Camera",
+    };
+  });
+
   const [renderDone, setRenderDone] = useState<(() => void) | undefined>();
-  const url = "";
-  var panelTitle = "Camera Streamer";
 
   useLayoutEffect(() => {
     context.onRender = (renderState: RenderState, done) => {
@@ -59,11 +60,11 @@ function ExamplePanel({ context}: { context: PanelExtensionContext}): JSX.Elemen
           if (action.payload.path[0] === "general" && action.payload.path[1] === "title") {
             // Read action.payload.value for the new panel title value
             setState({ ...state, Title: action.payload.value as string });
-            console.log("panelTitle", panelTitle);
+            console.log("panelTitle", state.Title);
           } else if (action.payload.path[0] === "general" && action.payload.path[1] === "url") {
             // Read action.payload.value for the new panel title value
             setState({ ...state, url: action.payload.value as string });
-            console.log("url", url);
+            console.log("url", state.url);
           }
           break;
       }
@@ -72,7 +73,7 @@ function ExamplePanel({ context}: { context: PanelExtensionContext}): JSX.Elemen
   context.updatePanelSettingsEditor(panelSettings);
   // invoke the done callback once the render is complete
   useEffect(() => {
-    // context.updatePanelSettingsEditor(panelSettings);
+    context.saveState(state);
     renderDone?.();
 
   }, [renderDone, panelSettings]);
@@ -95,6 +96,6 @@ function ExamplePanel({ context}: { context: PanelExtensionContext}): JSX.Elemen
   );
 }
 
-export function initExamplePanel(context: PanelExtensionContext): void {
-  ReactDOM.render(<ExamplePanel context={context} />, context.panelElement);
+export function initStreamerPanel(context: PanelExtensionContext): void {
+  ReactDOM.render(<StreamerPanel context={context} />, context.panelElement);
 }

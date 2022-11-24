@@ -6,7 +6,7 @@ import RTSPtoWEBPlayer from "rtsptowebplayer";
 const ReactPlayer = ({url}) => {
 
     const playerElement = useRef(null);
-    const [player, setPlayer] = useState(null);
+    var [player, setPlayer] = useState(null);
     const [state, setState] = useState('pause');
     const stateListener = (e) => {
         setState(e.type);
@@ -27,7 +27,11 @@ const ReactPlayer = ({url}) => {
             player.video.onplay = stateListener;
         }
         if (url !== null && player !== null) {
-            player.load(url);
+            try {
+                player.load(url);
+            } catch (e) {
+                player = null;
+            }
         }
 
         return () => {
@@ -38,10 +42,10 @@ const ReactPlayer = ({url}) => {
     }, [url, player]);
 
     return (<div className="player-wrapper">
-        <div ref={playerElement}/>
         <div className="control">
             <button onClick={playPause}>Restart</button>
         </div>
+        <div ref={playerElement}/>
     </div>)
 }
 
